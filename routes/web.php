@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,3 +28,6 @@ Route::get('/tags/{id}', [TagController::class, 'show'])->name('tags.show');
 Route::get('/tags/{id}/edit', [TagController::class, 'edit'])->name('tags.edit');
 Route::put('/tags/{id}', [TagController::class, 'update'])->name('tags.update');
 Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
+
+/* Tasks */
+Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
