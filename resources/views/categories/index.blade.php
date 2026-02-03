@@ -33,7 +33,9 @@
                                 Ver
                             </a>
 
-                            <a href="#" class="btn btn-warning btn-sm categories__btn">Editar</a>
+                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm categories__btn">
+                                Editar
+                            </a>
                             <a href="#" class="btn btn-danger btn-sm categories__btn">Eliminar</a>
                         </td>    
                     </tr>

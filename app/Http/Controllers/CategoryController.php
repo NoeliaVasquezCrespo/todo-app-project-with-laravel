@@ -39,4 +39,27 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('success', 'Categoría creada exitosamente.');
     }
 
+    public function edit($id)
+    {
+        $category = Category::find($id);
+        return view('categories.edit', compact('category'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $name = $request->input('name');
+        $description = $request->input('description');
+        $color = $request->input('color');
+
+        $category = Category::find($id);
+
+        $category->update([
+            'name' => $name,
+            'description' => $description,
+            'color' => $color
+        ]);
+
+        return redirect()->route('categories.index')->with('success', 'Categoría actualizada exitosamente.');
+    }
+
 }
