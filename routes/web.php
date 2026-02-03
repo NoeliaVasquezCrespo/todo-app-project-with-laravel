@@ -31,3 +31,4 @@ Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('tags.destr
 
 /* Tasks */
 Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+Route::patch('/tasks/{id}/status', [TaskController::class, 'status'])->name('tasks.status');

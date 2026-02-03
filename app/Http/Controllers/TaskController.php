@@ -12,4 +12,15 @@ class TaskController extends Controller
         $tasks = Task::with(['category', 'tags'])->get();
         return view('tasks.index', compact('tasks'));
     }
+
+    public function status(Request $request, $id) 
+    {
+        $task = Task::find($id);
+
+        $task->update([
+            'status' => !$task->status
+        ]);
+
+        return redirect()->route('tasks.index');
+    }
 }

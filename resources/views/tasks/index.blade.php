@@ -14,7 +14,14 @@
             <ul class="task__items">
                 @foreach ($tasks as $task)
                     <li class="task__item {{ $task->status ? 'task__item--completed' : '' }}">
-                        <input class="task__checkbox" type="checkbox" {{ $task->status ? 'checked' : '' }}/>
+                        <form action="{{ route('tasks.status', $task->id) }}" method="POST">  
+                            @csrf
+                            @method('PATCH')
+                            
+                            <input class="task__checkbox" type="checkbox" onchange="this.form.submit()"
+                                {{ $task->status ? 'checked' : '' }}
+                            />
+                        </form>
 
                         <div class="task__content">
                             <h4 class="task__item-title">{{ $task->title }}</h4>
