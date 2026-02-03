@@ -2,6 +2,7 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/todo-project/category_style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container categories">
 
@@ -39,13 +40,26 @@
                             <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                               <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que desea eliminar esta categoría?')">
+                                    Eliminar
+                                </button>
                             </form>
                         </td>    
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: '{{ session('success') }}',
+                    confirmButtonColor: '#3085d6'
+                });
+            </script>
+        @endif
     @endif
 
 </div>
