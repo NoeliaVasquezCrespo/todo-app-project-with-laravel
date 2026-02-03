@@ -61,4 +61,11 @@ class TagController extends Controller
 
         return redirect()->route('tags.index')->with('success', 'Etiqueta actualizada exitosamente.');
     }
+
+    public function destroy($id)
+    {  
+        $tag = Tag::find($id);
+        $tag->delete();
+        return redirect()->route('tags.index')->with('success', 'Etiqueta eliminada exitosamente.');
+    }
 }

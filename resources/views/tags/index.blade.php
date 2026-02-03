@@ -2,6 +2,8 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/todo-project/tag_style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="container tags">
 
     <h1 class="tags__title">Lista de Etiquetas</h1>
@@ -40,12 +42,30 @@
                             <a href="{{ route('tags.edit', $tag->id) }}" class="btn btn-warning btn-sm tags__btn">
                                 Editar
                             </a>
-                            <a href="#" class="btn btn-danger btn-sm tags__btn">Eliminar</a>
+                            <form action="{{ route('tags.destroy', $tag->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que desea eliminar la etiqueta?')">
+                                    Eliminar
+                                </button>
+                            </form>
                         </td>    
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
+         @if (session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: '{{ session('success') }}',
+                    confirmButtonColor: '#3085d6'
+                });
+            </script>
+        @endif
+        
     @endif
 
 </div>

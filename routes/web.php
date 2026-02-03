@@ -26,3 +26,4 @@ Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create'
 Route::get('/tags/{id}', [TagController::class, 'show'])->name('tags.show');
 Route::get('/tags/{id}/edit', [TagController::class, 'edit'])->name('tags.edit');
 Route::put('/tags/{id}', [TagController::class, 'update'])->name('tags.update');
+Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
