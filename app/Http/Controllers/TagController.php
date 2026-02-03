@@ -39,4 +39,26 @@ class TagController extends Controller
         return redirect()->route('tags.index')->with('success', 'Etiqueta creada exitosamente.');
     }
 
+    public function edit($id)
+    {
+        $tag = Tag::find($id);
+        return view('tags.edit', compact('tag'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $name = $request->input('name');
+        $description = $request->input('description');
+        $color = $request->input('color');
+
+        $tag = Tag::find($id);
+
+        $tag->update([
+            'name' => $name,
+            'description' => $description,
+            'color' => $color
+        ]);
+
+        return redirect()->route('tags.index')->with('success', 'Etiqueta actualizada exitosamente.');
+    }
 }
