@@ -17,7 +17,7 @@
                         <form action="{{ route('tasks.status', $task->id) }}" method="POST">  
                             @csrf
                             @method('PATCH')
-                            
+
                             <input class="task__checkbox" type="checkbox" onchange="this.form.submit()"
                                 {{ $task->status ? 'checked' : '' }}
                             />
@@ -47,7 +47,9 @@
                         </div>
 
                         <div class="task__actions"> 
-                            <a href="" class="btn btn-info btn-sm"> Ver </a> 
+                            <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-info btn-sm">
+                                Ver
+                            </a> 
                             <a href="" class="btn btn-warning btn-sm tasks_btn"> Editar </a> 
                             <a href="" class="btn btn-danger btn-sm tasks_btn"> Eliminar </a>
                         </div>

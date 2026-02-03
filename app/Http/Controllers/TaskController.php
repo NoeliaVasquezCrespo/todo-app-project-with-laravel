@@ -23,4 +23,11 @@ class TaskController extends Controller
 
         return redirect()->route('tasks.index');
     }
+
+    public function show($id)
+    {
+        $task = Task::with(['category', 'tags'])->find($id);
+        return view('tasks.show', compact('task'));
+    }
+
 }
