@@ -5,6 +5,10 @@
 <div class="container tags">
 
     <h1 class="tags__title">Lista de Etiquetas</h1>
+    <br>
+
+     <a href="{{ route('tags.create') }}" class="btn btn-primary mb-3">
+                Crear nueva etiqueta </a>
 
     @if($tags->isEmpty())
         <p class="tags__empty">No hay etiquetas disponibles.</p>
