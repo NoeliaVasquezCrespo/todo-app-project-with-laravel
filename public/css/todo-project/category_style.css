@@ -3,6 +3,10 @@ table {
     text-align: center;
 }
 
+.categories__title {
+    text-align: center;
+}
+
 .category-detail__circle {
     display: inline-block;
     width: 25px;
@@ -13,12 +17,16 @@ table {
     vertical-align: middle;
 }
 
+.btn {
+    text-decoration: none !important;
+    color: #000000 !important;
+}
+
 @media screen and (max-width: 768px) {
-    h1 {
+    h1{
         text-align: center;
         font-size: 1.8rem;
     }
-
     .categories__actions {
         display: flex;
         flex-direction: column;

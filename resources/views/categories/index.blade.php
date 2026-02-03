@@ -6,7 +6,11 @@
 <div class="container categories">
 
     <h1 class="categories__title">Lista de Categorías</h1>
+    <br>
 
+     <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">
+                Crear nueva categoría </a>
+                
     @if($categories->isEmpty())
         <p class="categories__empty">No hay categorías disponibles.</p>
     @else

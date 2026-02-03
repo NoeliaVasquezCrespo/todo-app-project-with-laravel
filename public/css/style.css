@@ -13,7 +13,7 @@ img {
 }
 
 a {
-    margin-right: 40px;
+    margin-right: 25px;
     text-decoration: none !important;
     color: #064866 !important;
     font-weight: bold;
@@ -25,18 +25,15 @@ a:hover {
     text-decoration: underline !important;
 }
 
-
 @media screen and (max-width: 768px) {
     .header {
         padding: 0.8rem;
         font-size: 0.9rem;
     }
-
     img {
         height: 35px;
         margin-top: -5px;
     }
-
     a {
         margin-right: 15px;
         font-size: 0.8rem;
