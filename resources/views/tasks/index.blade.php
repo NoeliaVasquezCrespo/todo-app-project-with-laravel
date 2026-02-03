@@ -6,6 +6,9 @@
 <div class="container task">
     <h1 class="task__title">Lista de Tareas</h1>
 
+    <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3">
+                Agregar nueva tarea </a>
+
     @if($tasks->isEmpty())
         <p class="task__empty">No hay tareas disponibles.</p>
     @else

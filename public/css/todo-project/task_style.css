@@ -66,6 +66,33 @@
     opacity: 0.7;
 }
 
+
+.task-form__multiselect-btn {
+    cursor: pointer;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+}
+
+.task-form__multiselect-dropdown {
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+    background: white;
+}
+
+.task-form__multiselect-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
 
     h1 {
