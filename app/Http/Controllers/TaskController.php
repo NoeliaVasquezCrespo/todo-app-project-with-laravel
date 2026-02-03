@@ -61,4 +61,34 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Tarea creada correctamente.');
     }
 
+    public function edit($id) 
+    {
+        $task = Task::with(['category', 'tags'])->find($id);
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('tasks.edit', compact('task','categories', 'tags'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $title = $request->input('title');
+        $description = $request->input('description');
+        $categoryId = $request->input('category_id');
+        $tags = $request->input('tags', []);
+
+        $task = Task::find($id);
+        
+        $task->update([
+            'title' => $title,
+            'description' => $description,
+            'category_id' => $categoryId,
+        ]);
+
+        $task->tags()->sync($tags);
+
+        return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente.');
+    }
+
+
 }

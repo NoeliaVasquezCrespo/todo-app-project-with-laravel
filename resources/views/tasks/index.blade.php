@@ -53,7 +53,9 @@
                             <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-info btn-sm">
                                 Ver
                             </a> 
-                            <a href="" class="btn btn-warning btn-sm tasks_btn"> Editar </a> 
+                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm tasks__btn">
+                                Editar
+                            </a>
                             <a href="" class="btn btn-danger btn-sm tasks_btn"> Eliminar </a>
                         </div>
 
