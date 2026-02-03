@@ -2,6 +2,7 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/todo-project/task_style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container task">
     <h1 class="task__title">Lista de Tareas</h1>
@@ -56,13 +57,30 @@
                             <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm tasks__btn">
                                 Editar
                             </a>
-                            <a href="" class="btn btn-danger btn-sm tasks_btn"> Eliminar </a>
+                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que desea eliminar la tarea?')">
+                                    Eliminar
+                                </button>
+                            </form>
                         </div>
 
                     </li>
                 @endforeach
             </ul>
         </section>
+
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: '{{ session('success') }}',
+                    confirmButtonColor: '#3085d6'
+                });
+            </script>
+        @endif
     @endif
 </div>
 @endsection

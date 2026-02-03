@@ -78,7 +78,7 @@ class TaskController extends Controller
         $tags = $request->input('tags', []);
 
         $task = Task::find($id);
-        
+
         $task->update([
             'title' => $title,
             'description' => $description,
@@ -90,5 +90,10 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente.');
     }
 
-
+    public function destroy($id)
+    {  
+        $task = Task::find($id);
+        $task->delete();
+        return redirect()->route('tasks.index')->with('success', 'Tarea eliminada exitosamente.');
+    }
 }
