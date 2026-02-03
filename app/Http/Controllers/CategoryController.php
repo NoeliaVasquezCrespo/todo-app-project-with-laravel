@@ -62,4 +62,11 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('success', 'Categoría actualizada exitosamente.');
     }
 
+    public function destroy($id)
+    {  
+        $category = Category::find($id);
+        $category->delete();
+        return redirect()->route('categories.index')->with('success', 'Categoría eliminada exitosamente.');
+    }
+
 }
