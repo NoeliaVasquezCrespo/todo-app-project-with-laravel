@@ -25,37 +25,20 @@ a:hover {
     text-decoration: underline !important;
 }
 
-h1 {
-    text-align: center;
-}
-
-table {
-    margin-top: 20px;
-    text-align: center;
-}
-
 
 @media screen and (max-width: 768px) {
     .header {
         padding: 0.8rem;
         font-size: 0.9rem;
     }
+
     img {
         height: 35px;
         margin-top: -5px;
     }
+
     a {
         margin-right: 15px;
         font-size: 0.8rem;
-    }
-
-    .categories__actions {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .categories__actions .btn {
-        width: 100%;
     }
 }

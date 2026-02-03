@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('css/todo-project/category_style.css') }}">
+
 <div class="container categories">
 
     <h1 class="categories__title">Lista de Categorías</h1>
@@ -24,7 +25,10 @@
                         <td>{{ $category->id }}</td>
                         <td>{{ $category->name }}</td>
                         <td class="categories__actions">
-                            <a href="#" class="btn btn-info btn-sm categories__btn">Ver</a>
+                            <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info btn-sm">
+                                Ver
+                            </a>
+
                             <a href="#" class="btn btn-warning btn-sm categories__btn">Editar</a>
                             <a href="#" class="btn btn-danger btn-sm categories__btn">Eliminar</a>
                         </td>    

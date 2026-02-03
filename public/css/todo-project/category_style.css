@@ -1,0 +1,31 @@
+table {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.category-detail__circle {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+@media screen and (max-width: 768px) {
+    h1 {
+        text-align: center;
+        font-size: 1.8rem;
+    }
+
+    .categories__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .categories__actions .btn {
+        width: 100%;
+    }
+}
