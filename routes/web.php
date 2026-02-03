@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,3 +19,5 @@ Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('cat
 Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
 Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
+/* Tags */
+Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
