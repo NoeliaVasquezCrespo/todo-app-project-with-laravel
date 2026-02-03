@@ -30,7 +30,9 @@
                             </span>
                         </td>
                         <td class="tags__actions">
-                            <a href="#" class="btn btn-info btn-sm tags__btn">Ver</a>
+                            <a href="{{ route('tags.show', $tag->id) }}" class="btn btn-info btn-sm">
+                                Ver
+                            </a>
                             <a href="#" class="btn btn-warning btn-sm tags__btn">Editar</a>
                             <a href="#" class="btn btn-danger btn-sm tags__btn">Eliminar</a>
                         </td>    

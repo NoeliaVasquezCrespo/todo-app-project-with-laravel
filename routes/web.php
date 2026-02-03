@@ -21,3 +21,4 @@ Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name(
 
 /* Tags */
 Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
+Route::get('/tags/{id}', [TagController::class, 'show'])->name('tags.show');

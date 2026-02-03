@@ -13,4 +13,10 @@ class TagController extends Controller
         return view('tags.index', compact('tags'));
     }
 
+    public function show($id)
+    {
+        $tag = tag::find($id);
+        return view('tags.show', compact('tag'));
+    }
+
 }
