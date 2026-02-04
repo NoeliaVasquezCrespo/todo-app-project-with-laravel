@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
-@section('content')
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/todo-project/category_style.css') }}">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
 
+@section('content')
 <div class="container categories">
 
     <h1 class="categories__title">Lista de Categorías</h1>

@@ -26,15 +26,13 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
-        $name = $request->input('name');
-        $description = $request->input('description');
-        $color = $request->input('color');
-
-        Tag::create([
-            'name' => $name,
-            'description' => $description,
-            'color' => $color
+        $validated = $request->validate([
+            'name' => 'required|string|max:100|unique:tags,name',
+            'description' => 'required|string',
+            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ]);
+
+        Tag::create($validated);
         
         return redirect()->route('tags.index')->with('success', 'Etiqueta creada exitosamente.');
     }
@@ -47,17 +45,14 @@ class TagController extends Controller
 
     public function update(Request $request, $id)
     {
-        $name = $request->input('name');
-        $description = $request->input('description');
-        $color = $request->input('color');
-
-        $tag = Tag::find($id);
-
-        $tag->update([
-            'name' => $name,
-            'description' => $description,
-            'color' => $color
+        $validated = $request->validate([
+            'name' => 'required|string|max:100|unique:tags,name,' . $id,
+            'description' => 'required|string',
+            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ]);
+
+        $tag = Tag::findOrFail($id);
+        $tag->update($validated);
 
         return redirect()->route('tags.index')->with('success', 'Etiqueta actualizada exitosamente.');
     }

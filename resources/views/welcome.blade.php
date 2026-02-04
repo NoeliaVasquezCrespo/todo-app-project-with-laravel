@@ -21,7 +21,7 @@
 
         <section class="todo-app__button">
             <button class="todo-app__button--categories"> 
-                <a href="/categories" style="text-decoration: none; color: white;"> Ver todas las categorías </a>
+                <a href="/tasks" style="text-decoration: none; color: white;"> Ver todas las tareas </a>
             </button>
         </section>
     </div>

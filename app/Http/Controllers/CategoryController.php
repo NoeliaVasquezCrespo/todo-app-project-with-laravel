@@ -26,16 +26,14 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $name = $request->input('name');
-        $description = $request->input('description');
-        $color = $request->input('color');
-
-        Category::create([
-            'name' => $name,
-            'description' => $description,
-            'color' => $color
+        $validated = $request->validate([
+            'name' => 'required|string|max:100|unique:categories,name',
+            'description' => 'required|string',
+            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ]);
-        
+
+        Category::create($validated);
+
         return redirect()->route('categories.index')->with('success', 'Categoría creada exitosamente.');
     }
 
@@ -47,17 +45,14 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $name = $request->input('name');
-        $description = $request->input('description');
-        $color = $request->input('color');
-
-        $category = Category::find($id);
-
-        $category->update([
-            'name' => $name,
-            'description' => $description,
-            'color' => $color
+        $validated = $request->validate([
+            'name' => 'required|string|max:100|unique:categories,name,' . $id,
+            'description' => 'required|string',
+            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ]);
+
+        $category = Category::findOrFail($id);
+        $category->update($validated);
 
         return redirect()->route('categories.index')->with('success', 'Categoría actualizada exitosamente.');
     }

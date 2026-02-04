@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
-@section('content')
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/todo-project/task_style.css') }}">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
 
+@section('content')
 <div class="container task">
     <h1 class="task__title">Lista de Tareas</h1>
 
@@ -18,7 +19,7 @@
             <ul class="task__items">
                 @foreach ($tasks as $task)
                     <li class="task__item {{ $task->status ? 'task__item--completed' : '' }}">
-                        <form action="{{ route('tasks.status', $task->id) }}" method="POST">  
+                        <form action="{{ route('tasks.updatePartial', $task->id) }}" method="POST">  
                             @csrf
                             @method('PATCH')
 
@@ -65,7 +66,6 @@
                                 </button>
                             </form>
                         </div>
-
                     </li>
                 @endforeach
             </ul>

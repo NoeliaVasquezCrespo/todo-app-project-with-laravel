@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
-@section('content')
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/todo-project/task_style.css') }}">
+@endpush
 
+@section('content')
 <div class="container task-detail">
     <h1 class="task-detail__title">Detalle de la Tarea</h1>
 
@@ -36,7 +38,6 @@
             <a href="{{ route('tasks.index') }}" class="btn btn-info task-detail__btn">
                 Volver
             </a>
-
         </div>
     </div>
 </div>

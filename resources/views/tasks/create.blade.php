@@ -1,26 +1,27 @@
 @extends('layouts.app')
 
-@section('content')
-
-<div class="container task-form">
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/todo-project/task_style.css') }}">
-    <h1 class="task-form__title text-center">Nueva Tarea</h1>
+@endpush
 
+@section('content')
+<div class="container task-form">
+    <h1 class="task-form__title text-center">Nueva Tarea</h1>
     <form action="{{ route('tasks.store') }}" method="POST" class="task-form__form">
         @csrf
 
         <div class="task-form__group">
             <label class="form-label task-form__label">Título:</label>
-            <input type="text" name="title" class="form-control task-form__input" required>
+            <input type="text" name="title" class="form-control task-form__input" value="{{ old('title') }}" required>
             <br>
             <label class="form-label task-form__label">Descripción:</label>
-            <textarea name="description" class="form-control task-form__textarea" rows="3" required></textarea>
+            <textarea name="description" class="form-control task-form__textarea" rows="3">{{ old('description') }}</textarea>
             <br>
             <label class="form-label task-form__label">Categoría:</label>
-            <select name="category_id" class="form-control task-form__select" required>
+            <select name="category_id" class="form-control task-form__select">
                 <option value="">Seleccione una categoría</option>
                 @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">
+                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
                 @endforeach
@@ -35,7 +36,8 @@
                 <div class="task-form__multiselect-dropdown">
                     @foreach ($tags as $tag)
                         <label class="task-form__multiselect-option">
-                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" 
+                                {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
                             <span class="task-form__tag-label" style=" background-color: {{ $tag->color }}80; color: {{ $tag->color }};">
                                 {{ $tag->name }}
                             </span>
@@ -55,4 +57,19 @@
             </div>
     </form>
 </div>
+
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de validación',
+            html: `
+                @foreach ($errors->all() as $error)
+                    - {{ $error }}<br>
+                @endforeach
+            `,
+        });
+    </script>
+@endif
+
 @endsection

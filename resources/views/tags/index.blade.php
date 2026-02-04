@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('content')
+@push('styles')
 <link rel="stylesheet" href="{{ asset('css/todo-project/tag_style.css') }}">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
 
+@section('content')
 <div class="container tags">
-
     <h1 class="tags__title">Lista de Etiquetas</h1>
     <br>
 
-     <a href="{{ route('tags.create') }}" class="btn btn-primary mb-3">
+    <a href="{{ route('tags.create') }}" class="btn btn-primary mb-3">
                 Crear nueva etiqueta </a>
 
     @if($tags->isEmpty())

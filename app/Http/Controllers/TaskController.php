@@ -15,7 +15,13 @@ class TaskController extends Controller
         return view('tasks.index', compact('tasks'));
     }
 
-    public function status(Request $request, $id) 
+    public function show($id)
+    {
+        $task = Task::with(['category', 'tags'])->find($id);
+        return view('tasks.show', compact('task'));
+    }
+
+    public function updatePartial(Request $request, $id) 
     {
         $task = Task::find($id);
 
@@ -24,12 +30,6 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('tasks.index');
-    }
-
-    public function show($id)
-    {
-        $task = Task::with(['category', 'tags'])->find($id);
-        return view('tasks.show', compact('task'));
     }
 
     public function create() 
@@ -43,20 +43,24 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        $title = $request->input('title');
-        $description = $request->input('description');
-        $categoryId = $request->input('category_id');
-        $tags = $request->input('tags', []);
-
-        $task = Task::create([
-            'title' => $title,
-            'description' => $description,
-            'category_id' => $categoryId,
-            'status' => false
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+            'tags' => 'required|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
-        $task->tags()->attach($tags);
+        $task = Task::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'category_id' => $validated['category_id'],
+            'status' => false,
+        ]);
 
+        if (!empty($validated['tags'])) {
+            $task->tags()->attach($validated['tags']);
+        }
 
         return redirect()->route('tasks.index')->with('success', 'Tarea creada correctamente.');
     }
@@ -72,20 +76,23 @@ class TaskController extends Controller
 
     public function update(Request $request, $id)
     {
-        $title = $request->input('title');
-        $description = $request->input('description');
-        $categoryId = $request->input('category_id');
-        $tags = $request->input('tags', []);
-
-        $task = Task::find($id);
-
-        $task->update([
-            'title' => $title,
-            'description' => $description,
-            'category_id' => $categoryId,
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+            'tags' => 'required|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
-        $task->tags()->sync($tags);
+        $task = Task::findOrFail($id);
+
+        $task->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'category_id' => $validated['category_id'],
+        ]);
+
+        $task->tags()->sync($validated['tags'] ?? []);
 
         return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente.');
     }

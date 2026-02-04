@@ -10,13 +10,13 @@
 
         <div class="tag-form__group">
             <label class="form-label tag-form__label">Nombre etiqueta: </label>
-            <input type="text" name="name" class="form-control tag-form__input" value="{{ $tag->name }}" required>
+            <input type="text" name="name" class="form-control tag-form__input" value="{{ old('name', $tag->name) }}" required>
             <br>
             <label class="form-label tag-form__label">Descripción etiqueta: </label>
-            <textarea name="description" class="form-control tag-form__textarea" rows="3">{{ $tag->description }}</textarea>
+            <textarea name="description" class="form-control tag-form__textarea" rows="3">{{ old('description', $tag->description) }}</textarea>
             <br>
             <label class="form-label tag-form__label">Color</label>
-            <input type="color" name="color" class="form-control tag-form__color" value="{{ $tag->color }}">
+            <input type="color" name="color" class="form-control tag-form__color"  value="{{ old('color', $tag->color) }}" required>
         </div>
         <br>
         <div class="tag-form__actions">
@@ -25,4 +25,19 @@
         </div>    
     </form>
 </div>
+
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de validación',
+            html: `
+                @foreach ($errors->all() as $error)
+                    - {{ $error }}<br>
+                @endforeach
+            `,
+        });
+    </script>
+@endif
+
 @endsection
