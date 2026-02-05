@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\TagApiController;
+use App\Http\Controllers\Api\TaskApiController;
 
 
 // Categories
@@ -19,3 +20,11 @@ Route::get('/tags/{id}', [TagApiController::class, 'show']);
 Route::post('/tags', [TagApiController::class, 'store']);
 Route::put('/tags/{id}', [TagApiController::class, 'update']);
 Route::delete('/tags/{id}', [TagApiController::class, 'destroy']);
+
+// Tasks
+Route::get('/tasks', [TaskApiController::class, 'index']);
+Route::get('/tasks/{id}', [TaskApiController::class, 'show']);
+Route::post('/tasks', [TaskApiController::class, 'store']);
+Route::put('/tasks/{id}', [TaskApiController::class, 'update']);
+Route::patch('/tasks/{id}', [TaskApiController::class, 'updatePartial']);
+Route::delete('/tasks/{id}', [TaskApiController::class, 'destroy']);
