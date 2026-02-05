@@ -53,7 +53,7 @@ class TaskApiController extends Controller
         return response()->json(['data' => $task], 200);
     }
 
-    public function updatePartial($id)
+    public function update(Request $request, $id)
     {
         $task = Task::find($id);
 
@@ -63,26 +63,14 @@ class TaskApiController extends Controller
             ], 404);
         }
 
-        $task->status = !$task->status;
-        $task->save();
+        if ($request->has('status')) {
+            $task->status = $request->status;
+            $task->save();
 
-        return response()->json([
-            'message' => 'Estado de la tarea actualizado correctamente',
-            'data'    => [
-                'id'     => $task->id,
-                'status' => $task->status
-            ]
-        ], 200);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $task = Task::find($id);
-
-        if (!$task) {
             return response()->json([
-                'message' => 'Tarea no encontrada'
-            ], 404);
+                'message' => 'Estado actualizado correctamente',
+                'data'    => $task
+            ], 200);
         }
 
         $validated = $request->validate([
