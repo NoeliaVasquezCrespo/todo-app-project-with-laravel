@@ -21,17 +21,6 @@ class TaskController extends Controller
         return view('tasks.show', compact('task'));
     }
 
-    public function updatePartial(Request $request, $id) 
-    {
-        $task = Task::find($id);
-
-        $task->update([
-            'status' => !$task->status
-        ]);
-
-        return redirect()->route('tasks.index');
-    }
-
     public function create() 
     {
         $categories = Category::all();
@@ -39,7 +28,6 @@ class TaskController extends Controller
 
         return view('tasks.create', compact('categories', 'tags'));
     }
-
 
     public function store(Request $request)
     {
@@ -58,9 +46,7 @@ class TaskController extends Controller
             'status' => false,
         ]);
 
-        if (!empty($validated['tags'])) {
-            $task->tags()->attach($validated['tags']);
-        }
+        $task->tags()->attach($validated['tags']);
 
         return redirect()->route('tasks.index')->with('success', 'Tarea creada correctamente.');
     }
@@ -76,6 +62,16 @@ class TaskController extends Controller
 
     public function update(Request $request, $id)
     {
+        $task = Task::findOrFail($id);
+
+        if ($request->has('toggle_status')) {
+            $task->update([
+                'status' => !$task->status
+            ]);
+
+            return redirect()->route('tasks.index');
+        }
+        
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -83,8 +79,6 @@ class TaskController extends Controller
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
         ]);
-
-        $task = Task::findOrFail($id);
 
         $task->update([
             'title' => $validated['title'],

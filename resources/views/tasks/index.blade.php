@@ -19,10 +19,11 @@
             <ul class="task__items">
                 @foreach ($tasks as $task)
                     <li class="task__item {{ $task->status ? 'task__item--completed' : '' }}">
-                        <form action="{{ route('tasks.updatePartial', $task->id) }}" method="POST">  
+                        <form action="{{ route('tasks.update', $task->id) }}" method="POST">  
                             @csrf
-                            @method('PATCH')
+                            @method('PUT')
 
+                            <input type="hidden" name="toggle_status" value="1">
                             <input class="task__checkbox" type="checkbox" onchange="this.form.submit()"
                                 {{ $task->status ? 'checked' : '' }}
                             />
