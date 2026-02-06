@@ -5,25 +5,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\TagApiController;
 use App\Http\Controllers\Api\TaskApiController;
+use App\Http\Controllers\AuthController;
 
 
-// Categories
-Route::get('/categories', [CategoryApiController::class, 'index']);
-Route::get('/categories/{id}', [CategoryApiController::class, 'show']);
-Route::post('/categories', [CategoryApiController::class, 'store']);
-Route::put('/categories/{id}', [CategoryApiController::class, 'update']);
-Route::delete('/categories/{id}', [CategoryApiController::class, 'destroy']);
+Route::apiResource('categories', CategoryApiController::class);
+Route::apiResource('tags', TagApiController::class);
 
-// Tags
-Route::get('/tags', [TagApiController::class, 'index']);
-Route::get('/tags/{id}', [TagApiController::class, 'show']);
-Route::post('/tags', [TagApiController::class, 'store']);
-Route::put('/tags/{id}', [TagApiController::class, 'update']);
-Route::delete('/tags/{id}', [TagApiController::class, 'destroy']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
-// Tasks
-Route::get('/tasks', [TaskApiController::class, 'index']);
-Route::get('/tasks/{id}', [TaskApiController::class, 'show']);
-Route::post('/tasks', [TaskApiController::class, 'store']);
-Route::put('/tasks/{id}', [TaskApiController::class, 'update']);
-Route::delete('/tasks/{id}', [TaskApiController::class, 'destroy']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::apiResource('tasks', TaskApiController::class);
+});
+

@@ -8,9 +8,10 @@ use App\Models\Task;
 
 class TaskApiController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $tasks = Task::with('tags')->get();
+        $tasks = $request->user()->tasks()->with(['tags'])->get();
 
         return response()->json(['tasks' => $tasks], 200);
     }
@@ -19,13 +20,13 @@ class TaskApiController extends Controller
     {
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'tags'        => 'required|array',
             'tags.*'      => 'exists:tags,id'
         ]);
 
-        $task = Task::create([
+        $task = $request->user()->tasks()->create([
             'title'       => $validated['title'],
             'description' => $validated['description'],
             'category_id' => $validated['category_id'],
@@ -36,13 +37,13 @@ class TaskApiController extends Controller
 
         return response()->json([
             'message' => 'Tarea creada correctamente',
-            'data'    => $task->load('tags')
+            'data'    => $task->load(['category', 'tags'])
         ], 201);
     }
 
     public function show($id)
     {
-        $task = Task::with('tags')->find($id);
+        $task = $request->user()->tasks()->with(['category', 'tags'])->find($id);
 
         if (!$task) {
             return response()->json([
@@ -55,7 +56,7 @@ class TaskApiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $task = Task::find($id);
+        $task = $request->user()->tasks()->find($id);
 
         if (!$task) {
             return response()->json([
@@ -95,9 +96,9 @@ class TaskApiController extends Controller
         ], 200);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $task = Task::find($id);
+        $task = $request->user()->tasks()->find($id);
 
         if (!$task) {
             return response()->json([
