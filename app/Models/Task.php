@@ -11,12 +11,7 @@ class Task extends Model
 
     protected $table = 'tasks';
 
-    protected $fillable = [
-        'title',
-        'description',
-        'category_id',
-        'status',
-    ];
+    protected $guarded = [];
 
     public function user()
     {

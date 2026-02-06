@@ -11,11 +11,7 @@ class Category extends Model
 
     protected $table = 'categories';
 
-    protected $fillable = [
-        'name',
-        'description',
-        'color'
-    ];
+    protected $guarded = [];
 
     public function tasks()
     {

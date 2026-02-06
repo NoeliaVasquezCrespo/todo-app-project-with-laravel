@@ -11,11 +11,7 @@ class Tag extends Model
 
     protected $table = 'tags';
 
-    protected $fillable = [
-        'name',
-        'description',
-        'color',
-    ];  
+    protected $guarded = [];
 
     public function tasks()
     {
