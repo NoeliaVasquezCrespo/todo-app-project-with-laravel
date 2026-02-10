@@ -17,7 +17,7 @@ class TaskController extends Controller
 
     public function show($id)
     {
-        $task = Task::with(['category', 'tags'])->find($id);
+        $task = Task::with(['category', 'tags'])->findOrFail($id);
         return view('tasks.show', compact('task'));
     }
 
@@ -43,6 +43,7 @@ class TaskController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'category_id' => $validated['category_id'],
+            'user_id' => 1,
             'status' => false,
         ]);
 
@@ -53,7 +54,7 @@ class TaskController extends Controller
 
     public function edit($id) 
     {
-        $task = Task::with(['category', 'tags'])->find($id);
+        $task = Task::with(['category', 'tags'])->findOrFail($id);
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -93,7 +94,7 @@ class TaskController extends Controller
 
     public function destroy($id)
     {  
-        $task = Task::find($id);
+        $task = Task::findOrFail($id);
         $task->delete();
         return redirect()->route('tasks.index')->with('success', 'Tarea eliminada exitosamente.');
     }

@@ -8,10 +8,9 @@ use App\Models\Task;
 
 class TaskApiController extends Controller
 {
-
     public function index(Request $request)
     {
-        $tasks = $request->user()->tasks()->with(['tags'])->get();
+        $tasks = $request->user()->tasks()->with(['category', 'tags'])->get();
 
         return response()->json(['tasks' => $tasks], 200);
     }
@@ -26,12 +25,13 @@ class TaskApiController extends Controller
             'tags.*'      => 'exists:tags,id'
         ]);
 
-        $task = $request->user()->tasks()->create([
-            'title'       => $validated['title'],
-            'description' => $validated['description'],
-            'category_id' => $validated['category_id'],
-            'status'      => false
-        ]);
+        $task = new Task();
+        $task->title = $validated['title'];
+        $task->description = $validated['description'];
+        $task->category_id = $validated['category_id'];
+        $task->status = 1;
+        $task->user_id = $request->user()->id;
+        $task->save();
 
         $task->tags()->attach($validated['tags']);
 
@@ -41,28 +41,16 @@ class TaskApiController extends Controller
         ], 201);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $task = $request->user()->tasks()->with(['category', 'tags'])->find($id);
-
-        if (!$task) {
-            return response()->json([
-                'message' => 'Tarea no encontrada'
-            ], 404);
-        }
+        $task = $request->user()->tasks()->with(['category', 'tags'])->findOrFail($id);
 
         return response()->json(['data' => $task], 200);
     }
 
     public function update(Request $request, $id)
     {
-        $task = $request->user()->tasks()->find($id);
-
-        if (!$task) {
-            return response()->json([
-                'message' => 'Tarea no encontrada'
-            ], 404);
-        }
+        $task = $request->user()->tasks()->findOrFail($id);
 
         if ($request->has('status')) {
             $task->status = $request->status;
@@ -82,29 +70,22 @@ class TaskApiController extends Controller
             'tags.*'      => 'exists:tags,id'
         ]);
 
-        $task->update([
-            'title'       => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'category_id' => $validated['category_id']
-        ]);
+        $task->title = $validated['title'];
+        $task->description = $validated['description'];
+        $task->category_id = $validated['category_id'];
+        $task->save();
 
-        $task->tags()->sync($validated['tags'] ?? []);
+        $task->tags()->sync($validated['tags']);
 
         return response()->json([
             'message' => 'Tarea actualizada correctamente',
-            'data'    => $task->load('tags')
+            'data'    => $task->load(['category', 'tags'])
         ], 200);
     }
 
     public function destroy(Request $request, $id)
     {
-        $task = $request->user()->tasks()->find($id);
-
-        if (!$task) {
-            return response()->json([
-                'message' => 'Tarea no encontrada'
-            ], 404);
-        }
+        $task = $request->user()->tasks()->findOrFail($id);
 
         $task->delete();
 

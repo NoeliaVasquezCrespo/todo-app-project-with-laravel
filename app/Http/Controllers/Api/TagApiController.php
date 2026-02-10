@@ -20,10 +20,14 @@ class TagApiController extends Controller
         $validated = $request->validate([
             'name'        => 'required|string|max:100|unique:tags,name',
             'description' => 'required|string',
-            'color'       => 'required|string'
+            'color'       => 'required|regex:/^#[0-9A-Fa-f]{6}$/'
         ]);
 
-        $tag = Tag::create($validated);
+        $tag = new Tag();
+        $tag->name        = $validated['name'];
+        $tag->description = $validated['description'];
+        $tag->color       = $validated['color'];
+        $tag->save();
         
         return response()->json([
             'message' => 'Etiqueta creada correctamente',
@@ -33,7 +37,7 @@ class TagApiController extends Controller
 
     public function show($id)
     {
-        $tag = Tag::find($id);
+        $tag = Tag::findOrFail($id);
 
         if (!$tag) {
             return response()->json([
@@ -46,7 +50,7 @@ class TagApiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $tag = Tag::find($id);
+        $tag = Tag::findOrFail($id);
 
         if (!$tag) {
             return response()->json([
@@ -60,7 +64,10 @@ class TagApiController extends Controller
             'color'       => 'required|string'
         ]);
 
-        $tag->update($validated);
+        $tag->name        = $validated['name'];
+        $tag->description = $validated['description'];
+        $tag->color       = $validated['color'];
+        $tag->save();
 
         return response()->json([
             'message' => 'Etiqueta actualizada correctamente',
@@ -70,7 +77,7 @@ class TagApiController extends Controller
 
     public function destroy($id)
     {
-        $tag = Tag::find($id);
+        $tag = Tag::findOrFail($id);
 
         if (!$tag) {
             return response()->json([

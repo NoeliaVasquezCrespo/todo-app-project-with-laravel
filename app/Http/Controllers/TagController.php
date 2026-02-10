@@ -15,7 +15,7 @@ class TagController extends Controller
 
     public function show($id)
     {
-        $tag = Tag::find($id);
+        $tag = Tag::findOrFail($id);
         return view('tags.show', compact('tag'));
     }
 
@@ -39,7 +39,7 @@ class TagController extends Controller
 
     public function edit($id)
     {
-        $tag = Tag::find($id);
+        $tag = Tag::findOrFail($id);
         return view('tags.edit', compact('tag'));
     }
 
@@ -48,7 +48,7 @@ class TagController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100|unique:tags,name,' . $id,
             'description' => 'required|string',
-            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'color' => 'required | regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         $tag = Tag::findOrFail($id);
@@ -59,7 +59,7 @@ class TagController extends Controller
 
     public function destroy($id)
     {  
-        $tag = Tag::find($id);
+        $tag = Tag::findOrFail($id);
         $tag->delete();
         return redirect()->route('tags.index')->with('success', 'Etiqueta eliminada exitosamente.');
     }

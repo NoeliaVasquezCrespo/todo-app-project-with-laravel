@@ -8,11 +8,11 @@ use App\Models\Category;
 
 class CategoryApiController extends Controller
 {
-    public function index()
-    {
-        $categories = Category::all();
+    public function index() 
+    { 
+        $categories = Category::all(); 
 
-        return response()->json(['categories' => $categories], 200);
+        return response()->json(['categories' => $categories], 200); 
     }
 
     public function store(Request $request)
@@ -20,11 +20,15 @@ class CategoryApiController extends Controller
         $validated = $request->validate([
             'name'        => 'required|string|max:100|unique:categories,name',
             'description' => 'required|string',
-            'color'       => 'required|string'
+            'color'       => 'required|regex:/^#[0-9A-Fa-f]{6}$/'
         ]);
 
-        $category = Category::create($validated);
-        
+        $category = new Category();
+        $category->name        = $validated['name'];
+        $category->description = $validated['description'];
+        $category->color       = $validated['color'];
+        $category->save();
+
         return response()->json([
             'message' => 'Categoría creada correctamente',
             'data'    => $category
@@ -33,7 +37,7 @@ class CategoryApiController extends Controller
 
     public function show($id)
     {
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
 
         if (!$category) {
             return response()->json([
@@ -46,13 +50,7 @@ class CategoryApiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $category = Category::find($id);
-
-        if (!$category) {
-            return response()->json([
-                'message' => 'Categoría no encontrada'
-            ], 404);
-        }
+        $category = Category::findOrFail($id);
 
         $validated = $request->validate([
             'name'        => 'required|string|max:100|unique:categories,name,' . $id,
@@ -60,7 +58,10 @@ class CategoryApiController extends Controller
             'color'       => 'required|string'
         ]);
 
-        $category->update($validated);
+        $category->name        = $validated['name'];
+        $category->description = $validated['description'];
+        $category->color       = $validated['color'];
+        $category->save();
 
         return response()->json([
             'message' => 'Categoría actualizada correctamente',
@@ -70,20 +71,11 @@ class CategoryApiController extends Controller
 
     public function destroy($id)
     {
-        $category = Category::find($id);
-
-        if (!$category) {
-            return response()->json([
-                'message' => 'Categoría no encontrada'
-            ], 404);
-        }
-
+        $category = Category::findOrFail($id);
         $category->delete();
 
         return response()->json([
             'message' => 'Categoría eliminada correctamente'
         ], 200);
     }
-
 }
-

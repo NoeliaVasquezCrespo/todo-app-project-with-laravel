@@ -15,7 +15,7 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         return view('categories.show', compact('category'));
     }
 
@@ -29,7 +29,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100|unique:categories,name',
             'description' => 'required|string',
-            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'color' => 'required | regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         Category::create($validated);
@@ -39,7 +39,7 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         return view('categories.edit', compact('category'));
     }
 
@@ -59,7 +59,7 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {  
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Categoría eliminada exitosamente.');
     }
