@@ -10,9 +10,9 @@ class TaskApiController extends Controller
 {
     public function index(Request $request)
     {
-        $tasks = $request->user()->tasks()->with(['category', 'tags'])->get();
+        $tasks = $request->user()->tasks()->with(['category', 'tags'])->paginate(10);
 
-        return response()->json(['tasks' => $tasks], 200);
+        return response()->json($tasks);
     }
 
     public function store(Request $request)
@@ -41,9 +41,9 @@ class TaskApiController extends Controller
         ], 201);
     }
 
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        $task = $request->user()->tasks()->with(['category', 'tags'])->findOrFail($id);
+        $task = auth()->user()->tasks()->with(['category', 'tags'])->findOrFail($id);
 
         return response()->json(['data' => $task], 200);
     }
@@ -83,9 +83,9 @@ class TaskApiController extends Controller
         ], 200);
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        $task = $request->user()->tasks()->findOrFail($id);
+        $task = auth()->user()->tasks()->findOrFail($id);
 
         $task->delete();
 

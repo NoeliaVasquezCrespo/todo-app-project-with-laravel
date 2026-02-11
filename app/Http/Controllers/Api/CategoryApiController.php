@@ -8,11 +8,11 @@ use App\Models\Category;
 
 class CategoryApiController extends Controller
 {
-    public function index() 
+    public function index(Request $request) 
     { 
-        $categories = Category::all(); 
+        $categories = $request->user()->categories()->paginate(10); 
 
-        return response()->json(['categories' => $categories], 200); 
+        return response()->json($categories); 
     }
 
     public function store(Request $request)
@@ -24,9 +24,10 @@ class CategoryApiController extends Controller
         ]);
 
         $category = new Category();
-        $category->name        = $validated['name'];
+        $category->name = $validated['name'];
         $category->description = $validated['description'];
-        $category->color       = $validated['color'];
+        $category->color = $validated['color'];
+        $category->user_id = $request->user()->id;
         $category->save();
 
         return response()->json([
@@ -37,20 +38,14 @@ class CategoryApiController extends Controller
 
     public function show($id)
     {
-        $category = Category::findOrFail($id);
-
-        if (!$category) {
-            return response()->json([
-                'message' => 'Categoría no encontrada'
-            ], 404);
-        }
+        $category = auth()->user()->categories()->findOrFail($id);
 
         return response()->json($category, 200);
     }
 
     public function update(Request $request, $id)
     {
-        $category = Category::findOrFail($id);
+        $category = $request->user()->categories()->findOrFail($id);
 
         $validated = $request->validate([
             'name'        => 'required|string|max:100|unique:categories,name,' . $id,
@@ -58,9 +53,9 @@ class CategoryApiController extends Controller
             'color'       => 'required|string'
         ]);
 
-        $category->name        = $validated['name'];
+        $category->name = $validated['name'];
         $category->description = $validated['description'];
-        $category->color       = $validated['color'];
+        $category->color = $validated['color'];
         $category->save();
 
         return response()->json([
@@ -71,7 +66,7 @@ class CategoryApiController extends Controller
 
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
+        $category = auth()->user()->categories()->findOrFail($id);
         $category->delete();
 
         return response()->json([

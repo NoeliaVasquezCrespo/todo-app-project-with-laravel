@@ -8,11 +8,11 @@ use App\Models\Tag;
 
 class TagApiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tags = Tag::all();
+        $tags = $request->user()->tags()->paginate(10);
 
-        return response()->json(['tags' => $tags], 200);
+        return response()->json($tags);
     }
 
     public function store(Request $request)
@@ -24,9 +24,11 @@ class TagApiController extends Controller
         ]);
 
         $tag = new Tag();
-        $tag->name        = $validated['name'];
+        $tag->name = $validated['name'];
         $tag->description = $validated['description'];
-        $tag->color       = $validated['color'];
+        $tag->color = $validated['color'];
+        $tag->user_id = $request->user()->id;
+
         $tag->save();
         
         return response()->json([
@@ -37,20 +39,14 @@ class TagApiController extends Controller
 
     public function show($id)
     {
-        $tag = Tag::findOrFail($id);
-
-        if (!$tag) {
-            return response()->json([
-                'message' => 'Etiqueta no encontrada'
-            ], 404);
-        }
+        $tag = auth()->user()->tags()->findOrFail($id);
 
         return response()->json($tag, 200);
     }
 
     public function update(Request $request, $id)
     {
-        $tag = Tag::findOrFail($id);
+        $tag = $request->user()->tags()->findOrFail($id);
 
         if (!$tag) {
             return response()->json([
@@ -77,14 +73,7 @@ class TagApiController extends Controller
 
     public function destroy($id)
     {
-        $tag = Tag::findOrFail($id);
-
-        if (!$tag) {
-            return response()->json([
-                'message' => 'Etiqueta no encontrada'
-            ], 404);
-        }
-
+        $tag = auth()->user()->tags()->findOrFail($id);
         $tag->delete();
 
         return response()->json([
