@@ -8,11 +8,11 @@ use App\Models\Tag;
 
 class TagApiController extends Controller
 {
-    public function index()
+   public function index()
     {
-        $tags = Tag::all();
+        $tags = Tag::paginate(10);
 
-        return response()->json(['tags' => $tags], 200);
+        return response()->json($tags, 200);
     }
 
     public function store(Request $request)
