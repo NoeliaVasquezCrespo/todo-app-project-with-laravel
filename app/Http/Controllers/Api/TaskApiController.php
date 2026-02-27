@@ -8,12 +8,10 @@ use App\Models\Task;
 
 class TaskApiController extends Controller
 {
-
-    public function index(Request $request)
+    public function index()
     {
-        $tasks = $request->user()->tasks()->with(['tags'])->get();
-
-        return response()->json(['tasks' => $tasks], 200);
+        $tasks = Task::with(['category', 'tags']) ->paginate(10); 
+        return response()->json($tasks, 200);
     }
 
     public function store(Request $request)
@@ -26,14 +24,14 @@ class TaskApiController extends Controller
             'tags.*'      => 'exists:tags,id'
         ]);
 
-        $task = $request->user()->tasks()->create([
+        $task = Task::create([
             'title'       => $validated['title'],
             'description' => $validated['description'],
             'category_id' => $validated['category_id'],
             'status'      => false
         ]);
 
-        $task->tags()->attach($validated['tags']);
+        $task->tags()->sync($validated['tags']);
 
         return response()->json([
             'message' => 'Tarea creada correctamente',
@@ -43,7 +41,7 @@ class TaskApiController extends Controller
 
     public function show($id)
     {
-        $task = $request->user()->tasks()->with(['category', 'tags'])->find($id);
+        $task = Task::with(['category', 'tags'])->find($id);
 
         if (!$task) {
             return response()->json([
@@ -56,7 +54,7 @@ class TaskApiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $task = $request->user()->tasks()->find($id);
+        $task = Task::find($id);
 
         if (!$task) {
             return response()->json([
@@ -64,41 +62,33 @@ class TaskApiController extends Controller
             ], 404);
         }
 
-        if ($request->has('status')) {
-            $task->status = $request->status;
-            $task->save();
-
-            return response()->json([
-                'message' => 'Estado actualizado correctamente',
-                'data'    => $task
-            ], 200);
-        }
-
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'status'      => 'required|boolean',
             'tags'        => 'required|array',
             'tags.*'      => 'exists:tags,id'
         ]);
 
         $task->update([
             'title'       => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'category_id' => $validated['category_id']
+            'description' => $validated['description'],
+            'category_id' => $validated['category_id'],
+            'status'      => $validated['status']
         ]);
 
-        $task->tags()->sync($validated['tags'] ?? []);
+        $task->tags()->sync($validated['tags']);
 
         return response()->json([
             'message' => 'Tarea actualizada correctamente',
-            'data'    => $task->load('tags')
+            'data'    => $task->load(['category', 'tags'])
         ], 200);
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        $task = $request->user()->tasks()->find($id);
+        $task = Task::find($id);
 
         if (!$task) {
             return response()->json([
