@@ -8,14 +8,14 @@ use App\Http\Controllers\Api\TaskApiController;
 use App\Http\Controllers\AuthController;
 
 
-Route::apiResource('categories', CategoryApiController::class);
-Route::apiResource('tags', TagApiController::class);
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::apiResource('categories', CategoryApiController::class);
+    Route::apiResource('tags', TagApiController::class);
     Route::apiResource('tasks', TaskApiController::class);
+    Route::post('logout', [AuthController::class, 'logout']);
 });
 
